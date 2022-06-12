@@ -5,7 +5,7 @@ Diff formatting library for Go(e.g. Unified format)
 ## Install
 
 ```sh
-$ go get github.com/mrk21/go-diff-fmt
+$ go get github.com/mrk21/go-diff-fmt/...
 ```
 
 ## Usage
@@ -48,6 +48,7 @@ line9
 line10
 line11
 line12
+
 ```
 
 **b.txt:**
@@ -67,13 +68,14 @@ line11
 line12
 line13
 line14
+
 ```
 
 ```sh
 $ go run main.go
---- tmp/a.txt   2022-06-12 18:14:00.448904241 +0900
-+++ tmp/b.txt   2022-06-12 21:52:43.768868544 +0900
-@@ -2,10 +2,14 @@
+--- a.txt       2022-06-12 23:54:33.925077403 +0900
++++ b.txt       2022-06-12 23:54:35.255077400 +0900
+@@ -2,10 +2,13 @@
  line2
  line3
  line4
@@ -89,7 +91,6 @@ $ go run main.go
  line12
 +line13
 +line14
-+
 ```
 
 ## Refer to
