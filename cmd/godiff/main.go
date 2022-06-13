@@ -12,9 +12,10 @@ import (
 
 func main() {
 	var (
-		contextSize = flag.Int("context-size", 3, "Context size")
-		isColorize  = flag.Bool("color", false, "Enable colorize")
-		isHelp      = flag.Bool("help", false, "Show usage")
+		contextSize         = flag.Int("context-size", 3, "Context size")
+		isColorize          = flag.Bool("color", false, "Enable colorize")
+		isHelp              = flag.Bool("help", false, "Show usage")
+		IsHidingNoLFMessage = flag.Bool("hide-no-lf", false, "Hide a no LF message")
 	)
 	flag.CommandLine.Usage = func() {
 		o := flag.CommandLine.Output()
@@ -67,6 +68,6 @@ func main() {
 
 	lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
 	hunks := difffmt.GetHunks(lineDiffs, *contextSize)
-	unifiedFmt := difffmt.UnifiedFormat{IsColorize: *isColorize}
+	unifiedFmt := difffmt.UnifiedFormat{IsColorize: *isColorize, IsHidingNoLFMessage: *IsHidingNoLFMessage}
 	unifiedFmt.Print(targetA, targetB, hunks)
 }

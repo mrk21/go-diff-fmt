@@ -12,7 +12,8 @@ import (
 const UnifiedTimeFormat = "2006-01-02 15:04:05.000000000 -0700"
 
 type UnifiedFormat struct {
-	IsColorize bool
+	IsColorize          bool
+	IsHidingNoLFMessage bool
 }
 
 func (u UnifiedFormat) Print(targetA *DiffTarget, targetB *DiffTarget, hunks []Hunk) {
@@ -58,7 +59,11 @@ func (u UnifiedFormat) Fprint(w io.Writer, targetA *DiffTarget, targetB *DiffTar
 			}
 
 			if !diff.IsEndedLF {
-				fmt.Fprint(w, "\n\\ No newline at end of file\n")
+				if u.IsHidingNoLFMessage {
+					fmt.Fprint(w, "\n")
+				} else {
+					fmt.Fprint(w, "\n\\ No newline at end of file\n")
+				}
 			}
 		}
 	}
