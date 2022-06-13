@@ -42,11 +42,11 @@ func main() {
 	targetA := difffmt.NewDiffTarget(pathA)
 	targetB := difffmt.NewDiffTarget(pathB)
 
-	err := targetA.LoadStats()
+	err := targetA.LoadStat()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	err = targetB.LoadStats()
+	err = targetB.LoadStat()
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -65,8 +65,8 @@ func main() {
 	diffs := dmp.DiffMainRunes(runes1, runes2, false)
 	diffs = dmp.DiffCharsToLines(diffs, lineArray)
 
-	lineDiffs := difffmt.GetLineDiffFromDiffMatchPatch(diffs)
-	hunks := difffmt.GetHunk(lineDiffs, *contextSize)
-	unified := difffmt.UnifiedFormat{IsColor: *isColorize}
-	unified.Format(os.Stdout, targetA, targetB, hunks)
+	lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
+	hunks := difffmt.GetHunks(lineDiffs, *contextSize)
+	unifiedFmt := difffmt.UnifiedFormat{IsColorize: *isColorize}
+	unifiedFmt.Print(targetA, targetB, hunks)
 }

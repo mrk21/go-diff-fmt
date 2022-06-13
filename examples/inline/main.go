@@ -1,8 +1,6 @@
 package main
 
 import (
-	"os"
-
 	"github.com/mrk21/go-diff-fmt/difffmt"
 	"github.com/sergi/go-diff/diffmatchpatch"
 )
@@ -18,8 +16,8 @@ func main() {
 	diffs := dmp.DiffMainRunes(runes1, runes2, false)
 	diffs = dmp.DiffCharsToLines(diffs, lineArray)
 
-	lineDiffs := difffmt.GetLineDiffFromDiffMatchPatch(diffs)
-	hunks := difffmt.GetHunk(lineDiffs, 3)
-	unified := difffmt.UnifiedFormat{IsColor: true}
-	unified.Format(os.Stdout, targetA, targetB, hunks)
+	lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
+	hunks := difffmt.GetHunks(lineDiffs, 3)
+	unifiedFmt := difffmt.UnifiedFormat{IsColorize: true}
+	unifiedFmt.Print(targetA, targetB, hunks)
 }

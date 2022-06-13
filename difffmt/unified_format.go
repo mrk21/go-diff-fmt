@@ -1,6 +1,7 @@
 package difffmt
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -11,10 +12,20 @@ import (
 const UnifiedTimeFormat = "2006-01-02 15:04:05.000000000 -0700"
 
 type UnifiedFormat struct {
-	IsColor bool
+	IsColorize bool
 }
 
-func (u UnifiedFormat) Format(w io.Writer, targetA *DiffTarget, targetB *DiffTarget, hunks []Hunk) {
+func (u UnifiedFormat) Print(targetA *DiffTarget, targetB *DiffTarget, hunks []Hunk) {
+	u.Fprint(os.Stdout, targetA, targetB, hunks)
+}
+
+func (u UnifiedFormat) Sprint(targetA *DiffTarget, targetB *DiffTarget, hunks []Hunk) string {
+	var buf bytes.Buffer
+	u.Fprint(&buf, targetA, targetB, hunks)
+	return buf.String()
+}
+
+func (u UnifiedFormat) Fprint(w io.Writer, targetA *DiffTarget, targetB *DiffTarget, hunks []Hunk) {
 	u.color(w, "\x1b[01m", func(w io.Writer) {
 		u.header(w, targetA, targetB)
 	})
@@ -78,7 +89,7 @@ func (u UnifiedFormat) hunkRange(from int, count int) string {
 }
 
 func (u UnifiedFormat) color(w io.Writer, color string, output func(w io.Writer)) {
-	if u.IsColor && u.isTerminal() {
+	if u.IsColorize && u.isTerminal() {
 		fmt.Fprint(w, color)
 		output(w)
 		fmt.Fprint(w, "\x1b[0m")

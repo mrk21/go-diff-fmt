@@ -17,7 +17,7 @@ func NewDiffTarget(path string) *DiffTarget {
 	}
 }
 
-func (t *DiffTarget) LoadStats() error {
+func (t *DiffTarget) LoadStat() error {
 	file, err := os.Stat(t.Path)
 	if err != nil {
 		return err

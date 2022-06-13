@@ -26,15 +26,15 @@ type LineDiff struct {
 // runes1, runes2, lineArray := dmp.DiffLinesToRunes(text1, text2)
 // diffs := dmp.DiffMainRunes(runes1, runes2, false)
 // diffs = dmp.DiffCharsToLines(diffs, lineArray)
-// lineDiffs := difffmt.GetLineDiffFromDiffMatchPatch(diffs)
-func GetLineDiffFromDiffMatchPatch(diffs []diffmatchpatch.Diff) []LineDiff {
+// lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
+func GetLineDiffsFromDMP(diffs []diffmatchpatch.Diff) []LineDiff {
 	result := []LineDiff{}
 	currentOldLine := 0
 	currentNewLine := 0
 
 	for _, diff := range diffs {
 		lines := strings.Split(diff.Text, "\n")
-		operation := GetOperationFromDiffMatchPatch(diff.Type)
+		operation := GetOperationFromDMP(diff.Type)
 
 		for i, line := range lines {
 			if i+1 == len(lines) && line == "" {
@@ -73,7 +73,7 @@ func GetLineDiffFromDiffMatchPatch(diffs []diffmatchpatch.Diff) []LineDiff {
 	return result
 }
 
-func GetOperationFromDiffMatchPatch(operation diffmatchpatch.Operation) Operation {
+func GetOperationFromDMP(operation diffmatchpatch.Operation) Operation {
 	switch operation {
 	case diffmatchpatch.DiffDelete:
 		return OperationDelete

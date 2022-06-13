@@ -63,7 +63,7 @@ func (h *Hunk) NewLineCount() int {
 	return h.NewLineTo - h.NewLineFrom + 1
 }
 
-func GetHunk(diffs []LineDiff, contextSize int) []Hunk {
+func GetHunks(diffs []LineDiff, contextSize int) []Hunk {
 	// Correct output lines
 	outputLineMap := map[int]bool{}
 	for i, diff := range diffs {

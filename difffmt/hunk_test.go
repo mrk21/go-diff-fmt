@@ -24,8 +24,8 @@ func Test_Hunk(t *testing.T) {
 		diffs := dmp.DiffMainRunes(runes1, runes2, false)
 		diffs = dmp.DiffCharsToLines(diffs, lineArray)
 
-		lineDiffs := GetLineDiffFromDiffMatchPatch(diffs)
-		actual := GetHunk(lineDiffs, arg.n)
+		lineDiffs := GetLineDiffsFromDMP(diffs)
+		actual := GetHunks(lineDiffs, arg.n)
 
 		if d := cmp.Diff(actual, arg.expected); d != "" {
 			as, _ := json.MarshalIndent(actual, "", "    ")
