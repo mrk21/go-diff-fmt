@@ -22,14 +22,12 @@ type LineDiff struct {
 	IsEndedLF bool
 }
 
-func GetLineDiff(text1 string, text2 string) []LineDiff {
-	// Make lines diffs
-	dmp := diffmatchpatch.New()
-	runes1, runes2, lineArray := dmp.DiffLinesToRunes(string(text1), string(text2))
-	diffs := dmp.DiffMainRunes(runes1, runes2, false)
-	diffs = dmp.DiffCharsToLines(diffs, lineArray)
-
-	// Make single line diffs
+// dmp := diffmatchpatch.New()
+// runes1, runes2, lineArray := dmp.DiffLinesToRunes(text1, text2)
+// diffs := dmp.DiffMainRunes(runes1, runes2, false)
+// diffs = dmp.DiffCharsToLines(diffs, lineArray)
+// lineDiffs := difffmt.GetLineDiffFromDiffMatchPatch(diffs)
+func GetLineDiffFromDiffMatchPatch(diffs []diffmatchpatch.Diff) []LineDiff {
 	result := []LineDiff{}
 	currentOldLine := 0
 	currentNewLine := 0

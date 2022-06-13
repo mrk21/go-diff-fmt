@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 func Test_Hunk(t *testing.T) {
@@ -18,7 +19,14 @@ func Test_Hunk(t *testing.T) {
 	}
 
 	doTest := func(t *testing.T, arg testArg) {
-		actual := GetHunk(GetLineDiff(arg.a, arg.b), arg.n)
+		dmp := diffmatchpatch.New()
+		runes1, runes2, lineArray := dmp.DiffLinesToRunes(arg.a, arg.b)
+		diffs := dmp.DiffMainRunes(runes1, runes2, false)
+		diffs = dmp.DiffCharsToLines(diffs, lineArray)
+
+		lineDiffs := GetLineDiffFromDiffMatchPatch(diffs)
+		actual := GetHunk(lineDiffs, arg.n)
+
 		if d := cmp.Diff(actual, arg.expected); d != "" {
 			as, _ := json.MarshalIndent(actual, "", "    ")
 			es, _ := json.MarshalIndent(arg.expected, "", "    ")
@@ -36,7 +44,7 @@ func Test_Hunk(t *testing.T) {
 		b := "line1\n"
 
 		for n := 0; n <= 1; n++ {
-			t.Run(fmt.Sprintf("n=%d", n), func(t *testing.T) {
+			t.Run(fmt.Sprintf("contextSize = %d", n), func(t *testing.T) {
 				expected := []Hunk{
 					{
 						Diffs: []LineDiff{
@@ -76,7 +84,7 @@ func Test_Hunk(t *testing.T) {
 		b := "line1"
 
 		for n := 0; n <= 1; n++ {
-			t.Run(fmt.Sprintf("n=%d", n), func(t *testing.T) {
+			t.Run(fmt.Sprintf("contextSize = %d", n), func(t *testing.T) {
 				expected := []Hunk{
 					{
 						Diffs: []LineDiff{
@@ -116,7 +124,7 @@ func Test_Hunk(t *testing.T) {
 		b := "line2"
 
 		for n := 0; n <= 1; n++ {
-			t.Run(fmt.Sprintf("n=%d", n), func(t *testing.T) {
+			t.Run(fmt.Sprintf("contextSize = %d", n), func(t *testing.T) {
 				expected := []Hunk{
 					{
 						Diffs: []LineDiff{
@@ -164,7 +172,7 @@ func Test_Hunk(t *testing.T) {
 		})
 
 		for n := 0; n <= 1; n++ {
-			t.Run(fmt.Sprintf("n=%d", n), func(t *testing.T) {
+			t.Run(fmt.Sprintf("contextSize = %d", n), func(t *testing.T) {
 				expected := []Hunk{}
 				doTest(t, testArg{
 					a:        a,
@@ -185,7 +193,7 @@ func Test_Hunk(t *testing.T) {
 		})
 
 		for n := 0; n <= 1; n++ {
-			t.Run(fmt.Sprintf("n=%d", n), func(t *testing.T) {
+			t.Run(fmt.Sprintf("contextSize = %d", n), func(t *testing.T) {
 				expected := []Hunk{
 					{
 						Diffs: []LineDiff{
@@ -236,7 +244,7 @@ func Test_Hunk(t *testing.T) {
 		b := toText([]string{})
 
 		for n := 0; n <= 1; n++ {
-			t.Run(fmt.Sprintf("n=%d", n), func(t *testing.T) {
+			t.Run(fmt.Sprintf("contextSize = %d", n), func(t *testing.T) {
 				expected := []Hunk{
 					{
 						Diffs: []LineDiff{
@@ -309,7 +317,7 @@ func Test_Hunk(t *testing.T) {
 			"line14",
 		})
 
-		t.Run("n=0", func(t *testing.T) {
+		t.Run("contextSize = 0", func(t *testing.T) {
 			n := 0
 			expected := []Hunk{
 				{
@@ -394,7 +402,7 @@ func Test_Hunk(t *testing.T) {
 			})
 		})
 
-		t.Run("n=1", func(t *testing.T) {
+		t.Run("contextSize = 1", func(t *testing.T) {
 			n := 1
 
 			// Merge hunks that are adjacent

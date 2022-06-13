@@ -7,12 +7,14 @@ import (
 	"os"
 
 	"github.com/mrk21/go-diff-fmt/difffmt"
+	"github.com/sergi/go-diff/diffmatchpatch"
 )
 
 func main() {
 	var (
-		isColorize  = flag.Bool("c", false, "Enable colorize")
-		contextSize = flag.Int("n", 3, "Output NUM lines of unified context")
+		contextSize = flag.Int("context-size", 3, "Context size")
+		isColorize  = flag.Bool("color", false, "Enable colorize")
+		isHelp      = flag.Bool("help", false, "Show usage")
 	)
 	flag.CommandLine.Usage = func() {
 		o := flag.CommandLine.Output()
@@ -21,6 +23,10 @@ func main() {
 		flag.PrintDefaults()
 	}
 	flag.Parse()
+	if *isHelp {
+		flag.CommandLine.Usage()
+		os.Exit(2)
+	}
 	if *contextSize < 0 {
 		flag.CommandLine.Usage()
 		os.Exit(2)
@@ -51,7 +57,12 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	lineDiffs := difffmt.GetLineDiff(textA, textB)
+	dmp := diffmatchpatch.New()
+	runes1, runes2, lineArray := dmp.DiffLinesToRunes(string(textA), string(textB))
+	diffs := dmp.DiffMainRunes(runes1, runes2, false)
+	diffs = dmp.DiffCharsToLines(diffs, lineArray)
+
+	lineDiffs := difffmt.GetLineDiffFromDiffMatchPatch(diffs)
 	hunks := difffmt.GetHunk(lineDiffs, *contextSize)
 	unified := difffmt.UnifiedFormat{IsColor: *isColorize}
 	unified.Format(os.Stdout, targetA, targetB, hunks)
