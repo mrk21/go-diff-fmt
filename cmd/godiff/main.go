@@ -39,11 +39,14 @@ func main() {
 	pathA := args[0]
 	pathB := args[1]
 
-	targetA, err := difffmt.NewDiffTarget(pathA)
+	targetA := difffmt.NewDiffTarget(pathA)
+	targetB := difffmt.NewDiffTarget(pathB)
+
+	err := targetA.LoadStats()
 	if err != nil {
 		log.Fatalln(err)
 	}
-	targetB, err := difffmt.NewDiffTarget(pathB)
+	err = targetB.LoadStats()
 	if err != nil {
 		log.Fatalln(err)
 	}

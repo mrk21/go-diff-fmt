@@ -11,19 +11,23 @@ type DiffTarget struct {
 	ModifiedTime time.Time
 }
 
-func NewDiffTarget(path string) (*DiffTarget, error) {
-	file, err := os.Stat(path)
-	if err != nil {
-		return nil, err
-	}
+func NewDiffTarget(path string) *DiffTarget {
 	return &DiffTarget{
-		Path:         path,
-		ModifiedTime: file.ModTime(),
-	}, nil
+		Path: path,
+	}
 }
 
-func (i *DiffTarget) ReadText() (string, error) {
-	text, err := ioutil.ReadFile(i.Path)
+func (t *DiffTarget) LoadStats() error {
+	file, err := os.Stat(t.Path)
+	if err != nil {
+		return err
+	}
+	t.ModifiedTime = file.ModTime()
+	return nil
+}
+
+func (t *DiffTarget) ReadText() (string, error) {
+	text, err := ioutil.ReadFile(t.Path)
 	if err != nil {
 		return "", err
 	}

@@ -29,8 +29,10 @@ import (
 )
 
 func main() {
-	targetA, _ := difffmt.NewDiffTarget("a.txt")
-	targetB, _ := difffmt.NewDiffTarget("b.txt")
+	targetA := difffmt.NewDiffTarget("a.txt")
+	targetB := difffmt.NewDiffTarget("b.txt")
+	_ = targetA.LoadStats()
+	_ = targetB.LoadStats()
 	textA, _ := targetA.ReadText()
 	textB, _ := targetB.ReadText()
 

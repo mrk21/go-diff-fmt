@@ -8,12 +8,10 @@ import (
 )
 
 func main() {
-	targetA := difffmt.NewDiffTarget("a.txt")
-	targetB := difffmt.NewDiffTarget("b.txt")
-	_ = targetA.LoadStats()
-	_ = targetB.LoadStats()
-	textA, _ := targetA.ReadText()
-	textB, _ := targetB.ReadText()
+	targetA := difffmt.NewDiffTarget("a")
+	targetB := difffmt.NewDiffTarget("b")
+	textA := "line1\nline2a\nline3\n"
+	textB := "line1\nline2b\nline3b\n"
 
 	dmp := diffmatchpatch.New()
 	runes1, runes2, lineArray := dmp.DiffLinesToRunes(textA, textB)

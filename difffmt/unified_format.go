@@ -54,8 +54,19 @@ func (u UnifiedFormat) Format(w io.Writer, targetA *DiffTarget, targetB *DiffTar
 }
 
 func (u UnifiedFormat) header(w io.Writer, targetA *DiffTarget, targetB *DiffTarget) {
-	fmt.Fprintf(w, "--- %s\t%s\n", targetA.Path, targetA.ModifiedTime.Format(UnifiedTimeFormat))
-	fmt.Fprintf(w, "+++ %s\t%s\n", targetB.Path, targetB.ModifiedTime.Format(UnifiedTimeFormat))
+	if targetA.ModifiedTime.IsZero() {
+		fmt.Fprintf(w, "--- %s\n", targetA.Path)
+
+	} else {
+		fmt.Fprintf(w, "--- %s\t%s\n", targetA.Path, targetA.ModifiedTime.Format(UnifiedTimeFormat))
+	}
+
+	if targetB.ModifiedTime.IsZero() {
+		fmt.Fprintf(w, "+++ %s\n", targetB.Path)
+
+	} else {
+		fmt.Fprintf(w, "+++ %s\t%s\n", targetB.Path, targetB.ModifiedTime.Format(UnifiedTimeFormat))
+	}
 }
 
 func (u UnifiedFormat) hunkRange(from int, count int) string {
