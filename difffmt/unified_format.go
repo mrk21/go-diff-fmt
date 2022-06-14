@@ -34,8 +34,8 @@ func (u UnifiedFormat) Fprint(w io.Writer, targetA *DiffTarget, targetB *DiffTar
 	for _, hunk := range hunks {
 		u.color(w, "\x1b[36m", func(w io.Writer) {
 			fmt.Fprintf(w, "@@ -%s +%s @@\n",
-				u.hunkRange(hunk.OldLineFrom, hunk.OldLineCount()),
-				u.hunkRange(hunk.NewLineFrom, hunk.NewLineCount()),
+				u.hunkRange(hunk.OldLineFrom, hunk.OldLineCount),
+				u.hunkRange(hunk.NewLineFrom, hunk.NewLineCount),
 			)
 		})
 
