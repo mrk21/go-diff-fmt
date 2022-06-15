@@ -1,8 +1,8 @@
 # go-diff-fmt
 
-Diff formatting library for Go(e.g. Unified format).
+Diff formatting library for Go.
 
-For expample, it formats line based diff by [github.com/sergi/go-diff](https://github.com/sergi/go-diff) to Unified format.
+For example, it can format line based diff by [github.com/sergi/go-diff](https://github.com/sergi/go-diff) to Unified format.
 
 **NOTICE:**
 
@@ -41,7 +41,9 @@ func main() {
 
 	lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
 	hunks := difffmt.GetHunks(lineDiffs, 3)
-	unifiedFmt := difffmt.UnifiedFormat{IsColorize: true}
+	unifiedFmt := difffmt.NewUnifiedFormat(difffmt.UnifiedFormatOption{
+		ColorMode: difffmt.ColorTerminalOnly,
+	})
 	unifiedFmt.Print(targetA, targetB, hunks)
 }
 ```
@@ -109,3 +111,4 @@ $ go run main.go
 
 - [Unified Diff Format](https://www.artima.com/weblogs/viewpost.jsp?thread=164293)
 - [Detailed Unified (Comparing and Merging Files)](https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html)
+- [diff - Wikipedia](https://en.wikipedia.org/wiki/Diff)

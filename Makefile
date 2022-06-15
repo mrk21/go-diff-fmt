@@ -3,7 +3,7 @@ all: build
 
 .PHONY: build
 build:
-	go build -o bin/godiff cmd/godiff/main.go
+	go build -ldflags '-extldflags=-static' -o bin/godiff cmd/godiff/main.go
 
 .PHONY: test
 test:

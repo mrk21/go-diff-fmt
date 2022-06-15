@@ -18,6 +18,8 @@ func main() {
 
 	lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
 	hunks := difffmt.GetHunks(lineDiffs, 3)
-	unifiedFmt := difffmt.UnifiedFormat{IsColorize: true}
+	unifiedFmt := difffmt.NewUnifiedFormat(difffmt.UnifiedFormatOption{
+		ColorMode: difffmt.ColorTerminalOnly,
+	})
 	unifiedFmt.Print(targetA, targetB, hunks)
 }

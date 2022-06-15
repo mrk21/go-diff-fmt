@@ -21,7 +21,9 @@ func Test_UnifiedFormat(t *testing.T) {
 
 	lineDiffs := GetLineDiffsFromDMP(diffs)
 	hunks := GetHunks(lineDiffs, 3)
-	unifiedFmt := UnifiedFormat{IsColorize: true}
+	unifiedFmt := NewUnifiedFormat(UnifiedFormatOption{
+		ColorMode: ColorTerminalOnly,
+	})
 
 	t.Run("Print", func(t *testing.T) {
 		unifiedFmt.Print(targetA, targetB, hunks)

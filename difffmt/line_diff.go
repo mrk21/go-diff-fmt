@@ -14,6 +14,12 @@ const (
 	OperationEqual  Operation = 0
 )
 
+var OperationMapForDMP = map[diffmatchpatch.Operation]Operation{
+	diffmatchpatch.DiffDelete: OperationDelete,
+	diffmatchpatch.DiffInsert: OperationInsert,
+	diffmatchpatch.DiffEqual:  OperationEqual,
+}
+
 type LineDiff struct {
 	Operation Operation
 	Text      string
@@ -34,7 +40,7 @@ func GetLineDiffsFromDMP(diffs []diffmatchpatch.Diff) []LineDiff {
 
 	for _, diff := range diffs {
 		lines := strings.Split(diff.Text, "\n")
-		operation := GetOperationFromDMP(diff.Type)
+		operation := OperationMapForDMP[diff.Type]
 
 		for i, line := range lines {
 			if i+1 == len(lines) && line == "" {
@@ -71,16 +77,4 @@ func GetLineDiffsFromDMP(diffs []diffmatchpatch.Diff) []LineDiff {
 		}
 	}
 	return result
-}
-
-func GetOperationFromDMP(operation diffmatchpatch.Operation) Operation {
-	switch operation {
-	case diffmatchpatch.DiffDelete:
-		return OperationDelete
-	case diffmatchpatch.DiffInsert:
-		return OperationInsert
-	case diffmatchpatch.DiffEqual:
-		return OperationEqual
-	}
-	panic("Invalid operation")
 }

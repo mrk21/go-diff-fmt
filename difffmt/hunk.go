@@ -36,54 +36,54 @@ func (h *Hunk) AppendDiff(diff LineDiff) {
 	}
 	switch diff.Operation {
 	case OperationEqual, OperationInsert:
-		if h.NewLineCount == 0 {
+		h.NewLineCount++
+		if h.NewLineCount == 1 {
 			h.NewLineFrom = diff.NewLine
 		}
 		h.NewLineTo = diff.NewLine
-		h.NewLineCount++
 	}
 	switch diff.Operation {
 	case OperationEqual, OperationDelete:
-		if h.OldLineCount == 0 {
+		h.OldLineCount++
+		if h.OldLineCount == 1 {
 			h.OldLineFrom = diff.OldLine
 		}
 		h.OldLineTo = diff.OldLine
-		h.OldLineCount++
 	}
 }
 
 func GetHunks(diffs []LineDiff, contextSize int) []Hunk {
-	// Correct output lines
-	outputLineMap := map[int]bool{}
+	// Correct lines
+	lineMap := map[int]bool{}
 	for i, diff := range diffs {
 		switch diff.Operation {
 		case OperationInsert, OperationDelete:
-			begin := max(i-contextSize, 0)
-			end := min(i+contextSize, len(diffs)-1)
+			begin := max((i - contextSize), 0)
+			end := min((i + contextSize), (len(diffs) - 1))
 			for j := begin; j <= end; j++ {
-				outputLineMap[j] = true
+				lineMap[j] = true
 			}
 		}
 	}
-	outputLine := []int{}
-	for line := range outputLineMap {
-		outputLine = append(outputLine, line)
+	lines := []int{}
+	for line := range lineMap {
+		lines = append(lines, line)
 	}
-	sort.Ints(outputLine)
+	sort.Ints(lines)
 
-	// Group output lines
-	result := []Hunk{}
+	// Make hunks
+	hunks := []Hunk{}
 	var currentHunk *Hunk = nil
 
-	for i, line := range outputLine {
-		if i == 0 || outputLine[i-1]+1 != line {
-			result = append(result, NewHunk())
-			currentHunk = &result[len(result)-1]
+	for i, line := range lines {
+		if currentHunk == nil || lines[i-1]+1 != line {
+			hunks = append(hunks, NewHunk())
+			currentHunk = &hunks[len(hunks)-1]
 		}
 		currentHunk.AppendDiff(diffs[line])
 	}
 
-	return result
+	return hunks
 }
 
 func max(a, b int) int {

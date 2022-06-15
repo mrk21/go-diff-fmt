@@ -13,9 +13,10 @@ import (
 func main() {
 	var (
 		contextSize         = flag.Int("context-size", 3, "Context size")
-		isColorize          = flag.Bool("color", false, "Enable colorize")
+		isColor             = flag.Bool("color", false, "Enable color")
+		isForceColor        = flag.Bool("force-color", false, "Enable color even other than the terminal")
 		isHelp              = flag.Bool("help", false, "Show usage")
-		IsHidingNoLFMessage = flag.Bool("hide-no-lf", false, "Hide a no LF message")
+		isHidingNoLFMessage = flag.Bool("hide-no-lf", false, "Hide a no LF message")
 	)
 	flag.CommandLine.Usage = func() {
 		o := flag.CommandLine.Output()
@@ -24,6 +25,7 @@ func main() {
 		flag.PrintDefaults()
 	}
 	flag.Parse()
+
 	if *isHelp {
 		flag.CommandLine.Usage()
 		os.Exit(2)
@@ -32,6 +34,15 @@ func main() {
 		flag.CommandLine.Usage()
 		os.Exit(2)
 	}
+
+	colorMode := difffmt.ColorNone
+	if *isColor {
+		colorMode = difffmt.ColorTerminalOnly
+	}
+	if *isForceColor {
+		colorMode = difffmt.ColorAlways
+	}
+
 	args := flag.Args()
 	if len(args) != 2 {
 		flag.CommandLine.Usage()
@@ -68,6 +79,9 @@ func main() {
 
 	lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
 	hunks := difffmt.GetHunks(lineDiffs, *contextSize)
-	unifiedFmt := difffmt.UnifiedFormat{IsColorize: *isColorize, IsHidingNoLFMessage: *IsHidingNoLFMessage}
+	unifiedFmt := difffmt.NewUnifiedFormat(difffmt.UnifiedFormatOption{
+		ColorMode:           colorMode,
+		IsHidingNoLFMessage: *isHidingNoLFMessage,
+	})
 	unifiedFmt.Print(targetA, targetB, hunks)
 }
