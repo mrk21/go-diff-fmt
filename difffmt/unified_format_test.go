@@ -19,8 +19,8 @@ func Test_UnifiedFormat(t *testing.T) {
 	diffs := dmp.DiffMainRunes(runes1, runes2, false)
 	diffs = dmp.DiffCharsToLines(diffs, lineArray)
 
-	lineDiffs := GetLineDiffsFromDMP(diffs)
-	hunks := GetHunks(lineDiffs, 3)
+	lineDiffs := MakeLineDiffsFromDMP(diffs)
+	hunks := MakeHunks(lineDiffs, 3)
 	unifiedFmt := NewUnifiedFormat(UnifiedFormatOption{
 		ColorMode: ColorTerminalOnly,
 	})

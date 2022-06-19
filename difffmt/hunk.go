@@ -52,7 +52,7 @@ func (h *Hunk) AppendDiff(diff LineDiff) {
 	}
 }
 
-func GetHunks(diffs []LineDiff, contextSize int) []Hunk {
+func MakeHunks(diffs []LineDiff, contextSize int) []Hunk {
 	// Correct lines
 	lineMap := map[int]bool{}
 	for i, diff := range diffs {

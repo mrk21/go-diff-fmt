@@ -32,8 +32,8 @@ type LineDiff struct {
 // runes1, runes2, lineArray := dmp.DiffLinesToRunes(text1, text2)
 // diffs := dmp.DiffMainRunes(runes1, runes2, false)
 // diffs = dmp.DiffCharsToLines(diffs, lineArray)
-// lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
-func GetLineDiffsFromDMP(diffs []diffmatchpatch.Diff) []LineDiff {
+// lineDiffs := difffmt.MakeLineDiffsFromDMP(diffs)
+func MakeLineDiffsFromDMP(diffs []diffmatchpatch.Diff) []LineDiff {
 	result := []LineDiff{}
 	currentOldLine := 0
 	currentNewLine := 0

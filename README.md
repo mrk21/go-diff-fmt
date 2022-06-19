@@ -41,8 +41,8 @@ func main() {
 	diffs := dmp.DiffMainRunes(runes1, runes2, false)
 	diffs = dmp.DiffCharsToLines(diffs, lineArray)
 
-	lineDiffs := difffmt.GetLineDiffsFromDMP(diffs)
-	hunks := difffmt.GetHunks(lineDiffs, 3)
+	lineDiffs := difffmt.MakeLineDiffsFromDMP(diffs)
+	hunks := difffmt.MakeHunks(lineDiffs, 3)
 	unifiedFmt := difffmt.NewUnifiedFormat(difffmt.UnifiedFormatOption{
 		ColorMode: difffmt.ColorTerminalOnly,
 	})
