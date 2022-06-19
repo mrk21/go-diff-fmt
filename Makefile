@@ -8,3 +8,7 @@ build:
 .PHONY: test
 test:
 	go test -v ./difffmt
+
+.PHONY: setup
+setup:
+	go install golang.org/x/tools/cmd/godoc@latest

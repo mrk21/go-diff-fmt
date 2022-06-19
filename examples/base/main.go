@@ -13,11 +13,14 @@ func main() {
 	textA, _ := targetA.ReadText()
 	textB, _ := targetB.ReadText()
 
+	// Computing a line-mode diff
+	// @see https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
 	dmp := diffmatchpatch.New()
 	runes1, runes2, lineArray := dmp.DiffLinesToRunes(textA, textB)
 	diffs := dmp.DiffMainRunes(runes1, runes2, false)
 	diffs = dmp.DiffCharsToLines(diffs, lineArray)
 
+	// Format `[]diffmatchpatch.Diff` to Unified format
 	lineDiffs := difffmt.MakeLineDiffsFromDMP(diffs)
 	hunks := difffmt.MakeHunks(lineDiffs, 3)
 	unifiedFmt := difffmt.NewUnifiedFormat(difffmt.UnifiedFormatOption{

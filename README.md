@@ -1,6 +1,6 @@
 # go-diff-fmt
 
-[![GoDev](https://pkg.go.dev/badge/github.com/mrk21/go-diff-fmt)](https://pkg.go.dev/github.com/mrk21/go-diff-fmt)
+[![Go Reference](https://pkg.go.dev/badge/github.com/mrk21/go-diff-fmt.svg)](https://pkg.go.dev/github.com/mrk21/go-diff-fmt)
 
 Diff formatting library for Go.
 
@@ -36,11 +36,14 @@ func main() {
 	textA, _ := targetA.ReadText()
 	textB, _ := targetB.ReadText()
 
+	// Computing a line-mode diff
+	// @see https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
 	dmp := diffmatchpatch.New()
 	runes1, runes2, lineArray := dmp.DiffLinesToRunes(textA, textB)
 	diffs := dmp.DiffMainRunes(runes1, runes2, false)
 	diffs = dmp.DiffCharsToLines(diffs, lineArray)
 
+	// Format `[]diffmatchpatch.Diff` to Unified format
 	lineDiffs := difffmt.MakeLineDiffsFromDMP(diffs)
 	hunks := difffmt.MakeHunks(lineDiffs, 3)
 	unifiedFmt := difffmt.NewUnifiedFormat(difffmt.UnifiedFormatOption{
@@ -109,8 +112,9 @@ $ go run main.go
 +line14
 ```
 
-## Refer to
+## References
 
 - [Unified Diff Format](https://www.artima.com/weblogs/viewpost.jsp?thread=164293)
 - [Detailed Unified (Comparing and Merging Files)](https://www.gnu.org/software/diffutils/manual/html_node/Detailed-Unified.html)
 - [diff - Wikipedia](https://en.wikipedia.org/wiki/Diff)
+- [Line or Word Diffs · google/diff-match-patch Wiki](https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs)

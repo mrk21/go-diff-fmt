@@ -28,11 +28,18 @@ type LineDiff struct {
 	IsEndedLF bool
 }
 
-// dmp := diffmatchpatch.New()
-// runes1, runes2, lineArray := dmp.DiffLinesToRunes(text1, text2)
-// diffs := dmp.DiffMainRunes(runes1, runes2, false)
-// diffs = dmp.DiffCharsToLines(diffs, lineArray)
-// lineDiffs := difffmt.MakeLineDiffsFromDMP(diffs)
+// In order to make line diffs from github.com/seri/diffmatchpatch, you can make by steps shown below:
+//
+// 	// Computing a line-mode diff by github.com/seri/diffmatchpatch
+// 	// @see https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
+// 	dmp := diffmatchpatch.New()
+// 	runes1, runes2, lineArray := dmp.DiffLinesToRunes(text1, text2)
+// 	diffs := dmp.DiffMainRunes(runes1, runes2, false)
+// 	diffs = dmp.DiffCharsToLines(diffs, lineArray)
+//
+// 	// Make `[]LineDiff` from `[]diffmatchpatch.Diff`
+// 	lineDiffs := difffmt.MakeLineDiffsFromDMP(diffs)
+//
 func MakeLineDiffsFromDMP(diffs []diffmatchpatch.Diff) []LineDiff {
 	result := []LineDiff{}
 	currentOldLine := 0
