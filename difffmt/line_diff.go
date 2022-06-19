@@ -28,9 +28,9 @@ type LineDiff struct {
 	IsEndedLF bool
 }
 
-// In order to make line diffs from github.com/seri/diffmatchpatch, you can make by steps shown below:
+// In order to make line diffs from github.com/sergi/go-diff, you can make by steps shown below:
 //
-// 	// Computing a line-mode diff by github.com/seri/diffmatchpatch
+// 	// Computing a line-mode diff by github.com/sergi/go-diff
 // 	// @see https://github.com/google/diff-match-patch/wiki/Line-or-Word-Diffs
 // 	dmp := diffmatchpatch.New()
 // 	runes1, runes2, lineArray := dmp.DiffLinesToRunes(text1, text2)
