@@ -1,5 +1,7 @@
 # go-diff-fmt
 
+[![GoDev](https://pkg.go.dev/badge/github.com/mrk21/go-diff-fmt)](https://pkg.go.dev/github.com/mrk21/go-diff-fmt)
+
 Diff formatting library for Go.
 
 For example, it can format line based diff by [github.com/sergi/go-diff](https://github.com/sergi/go-diff) to Unified format.
