@@ -13,6 +13,7 @@ import (
 func main() {
 	var (
 		contextSize         = flag.Int("context-size", 3, "Context size")
+		format              = flag.String("format", "unified", "Format type(unified,context)")
 		isColor             = flag.Bool("color", false, "Enable color")
 		isForceColor        = flag.Bool("force-color", false, "Enable color even other than the terminal")
 		isHelp              = flag.Bool("help", false, "Show usage")
@@ -79,9 +80,19 @@ func main() {
 
 	lineDiffs := difffmt.MakeLineDiffsFromDMP(diffs)
 	hunks := difffmt.MakeHunks(lineDiffs, *contextSize)
-	unifiedFmt := difffmt.NewUnifiedFormat(difffmt.UnifiedFormatOption{
-		ColorMode:           colorMode,
-		IsHidingNoLFMessage: *isHidingNoLFMessage,
-	})
-	unifiedFmt.Print(targetA, targetB, hunks)
+
+	switch *format {
+	case "unified":
+		unifiedFmt := difffmt.NewUnifiedFormat(difffmt.UnifiedFormatOption{
+			ColorMode:           colorMode,
+			IsHidingNoLFMessage: *isHidingNoLFMessage,
+		})
+		unifiedFmt.Print(targetA, targetB, hunks)
+	case "context":
+		contextFmt := difffmt.NewContextFormat(difffmt.ContextFormatOption{
+			ColorMode:           colorMode,
+			IsHidingNoLFMessage: *isHidingNoLFMessage,
+		})
+		contextFmt.Print(targetA, targetB, hunks)
+	}
 }
